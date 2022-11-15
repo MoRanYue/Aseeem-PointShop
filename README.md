@@ -10,6 +10,6 @@
 > If you want to help me, please create a pull request, thanks.
 
 > **Warning**  
-> According to *GNU LGPL v3.0* License. All changes about this project must be opensource.
+> According to *GNU GPL v3.0* License. All changes about this project must be opensource.
 
 This is a new Garry's mod point shop, I call it __"Aseeem PointShop"__.  
