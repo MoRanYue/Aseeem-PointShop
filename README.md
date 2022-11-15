@@ -12,4 +12,4 @@
 > **Warning**  
 > According to *GNU GPL v3.0* License. All changes about this project must be opensource.
 
-This is a new Garry's mod point shop, I call it __"Aseeem PointShop"__.  
+This is a new Garry's mod point shop, I call it "Aseeem PointShop".  
