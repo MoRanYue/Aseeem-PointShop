@@ -1,5 +1,7 @@
 # Aseeem 点数商店
 
+![License](https://img.shields.io/badge/license-GPL%20v3.0-blue) ![GitHub release (latest by date)](https://img.shields.io/github/downloads/Kamisato-Ayaka-233/Aseeem-PointShop/alpha/total?color=%23abcde&style=for-the-badge) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/Kamisato-Ayaka-233/Aseeem-PointShop?style=for-the-badge) {.align-center}
+
 [简体中文](README_CN.md) [English](README.md)
 
 ---
