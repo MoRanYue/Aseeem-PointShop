@@ -1,6 +1,10 @@
 # Aseeem PointShop
 ## Aseeem 点数商店
 
+![GitHub](https://img.shields.io/github/license/Kamisato-Ayaka-233/Aseeem-PointShop?style=for-the-badge)
+![GitHub release (latest by date)](https://img.shields.io/github/downloads/Kamisato-Ayaka-233/Aseeem-PointShop/alpha/total?color=%23abcde&style=for-the-badge)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/Kamisato-Ayaka-233/Aseeem-PointShop?style=for-the-badge)
+
 [简体中文](README_CN.md) [English](README.md)
 
 ---
