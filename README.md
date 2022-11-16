@@ -1,5 +1,4 @@
-# Aseeem PointShop
-## Aseeem 点数商店
+![Logo](https://raw.githubusercontent.com/Kamisato-Ayaka-233/Aseeem-PointShop/main/ASEEEM.png)
 
 ![GitHub](https://img.shields.io/github/license/Kamisato-Ayaka-233/Aseeem-PointShop?style=for-the-badge)
 ![GitHub release (latest by date)](https://img.shields.io/github/downloads/Kamisato-Ayaka-233/Aseeem-PointShop/alpha/total?color=%23abcde&style=for-the-badge)
@@ -8,6 +7,9 @@
 [简体中文](README_CN.md) [English](README.md)
 
 ---
+
+# Aseeem PointShop
+## Aseeem 点数商店
 
 > This project is still in its early stage, I haven't do much testing.  
 > There may be some errors and bugs, please use with **caution**.  
