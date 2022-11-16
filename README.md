@@ -16,6 +16,5 @@
 
 > This project is still in its early stage, I haven't do much testing.  
 > There may be some errors and bugs, please use with **caution**.  
-> If you want to help me, please create a pull request, thanks.
 
 This is a new Garry's mod point shop, I call it "Aseeem PointShop".  
