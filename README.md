@@ -12,9 +12,21 @@
 ---
 
 # Aseeem PointShop
-## Aseeem 点数商店
 
 > This project is still in its early stage, I haven't do much testing.  
 > There may be some errors and bugs, please use with **caution**.  
 
 This is a new Garry's mod point shop, I call it "Aseeem PointShop".  
+
+## Featured
+
+It's like the PointShop2.
+
+* Player can buy, sell items and equip, unequip them.
+* Support disposable items.
+* 3 types of item icons.
+* Support player trail now (because it's most easy to create.)
+* *Partial* English localization, completed Chinese localization.
+* All data save in JSON files.
+
+I just did it for 5 days, there are still many functions that haven't been done.  
