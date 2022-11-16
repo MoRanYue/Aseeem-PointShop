@@ -28,5 +28,6 @@ It's like the PointShop2.
 * Support player trail now (because it's most easy to create.)
 * *Partial* English localization, completed Chinese localization.
 * All data save in JSON files.
+* Very tiny.
 
 I just did it for 5 days, there are still many functions that haven't been done.  
