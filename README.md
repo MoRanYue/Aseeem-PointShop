@@ -3,7 +3,7 @@
 
 <div align="center">
   <img src="https://img.shields.io/github/license/Kamisato-Ayaka-233/Aseeem-PointShop?style=for-the-badge", alt="License">
-  <img src="https://img.shields.io/github/downloads/Kamisato-Ayaka-233/Aseeem-PointShop/alpha/total?color=%23abcde&style=for-the-badge" alt="releaae">
+  <img src="https://img.shields.io/github/downloads/Kamisato-Ayaka-233/Aseeem-PointShop/total?color=%23abcde&style=for-the-badge" alt="releaae">
   <img src="https://img.shields.io/github/v/release/Kamisato-Ayaka-233/Aseeem-PointShop?style=for-the-badge" alt="release">
 </div>
 
