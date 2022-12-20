@@ -1,0 +1,11 @@
+{
+    "title"    :  "Aseeem PointShop",
+    "type"    :  "tool",
+    "tags"    :  [ "fun", "realism" ],
+    "ignore"  :
+    [
+              "*.psd",
+              "*.vcproj",
+              "*.svn*"
+    ]
+}
