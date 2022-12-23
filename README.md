@@ -30,4 +30,5 @@ It's like the PointShop2.
 * All data save in JSON files.
 * Very tiny.
 
-I just did it for 5 days, there are still many functions that haven't been done.  
+**NOW** it completed basic functions
+
