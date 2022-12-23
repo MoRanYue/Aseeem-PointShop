@@ -403,7 +403,7 @@ function ASEEEM_PS.func.openMenu()
         end
     end
     ASEEEM_PS.menu.inventoryItemInfo.ClosePanel = function(s)
-        ASEEEM_PS.menu.inventoryItemInfo:MoveTo(ASEEEM_PS.menu.panel:GetWide(), ASEEEM_PS.menu.shop:GetY(), 0.6, 0, -1)
+        s:MoveTo(ASEEEM_PS.menu.panel:GetWide(), ASEEEM_PS.menu.shop:GetY(), 0.6, 0, -1)
         if IsValid(s.adjustWindow) then
             s.adjustWindow:Remove()
         end
@@ -706,3 +706,5 @@ ASEEEM_PS.func.AddHook("PlayerButtonDown", "openShopMenuUseKey", function(ply, b
         ASEEEM_PS.func.openMenu()
     end
 end)
+
+ASEEEM_PS.func.NetReceive('callAPSMenu', ASEEEM_PS.func.openMenu)

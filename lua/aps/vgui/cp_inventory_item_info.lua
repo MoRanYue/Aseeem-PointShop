@@ -78,10 +78,12 @@ function PANEL:SetItem(item)
         -- end
     elseif self.item.show_txt then
         self.icon = self.iconBg:Add("DLabel")
+        self.icon:SetSize(self.iconBg:GetWide(), self.iconBg:GetTall())
+        self.icon:SetContentAlignment(5)
+        -- self.icon:SetWrap(true)
         self.icon:SetFont("Roboto24")
         self.icon:SetText(self.item.show_txt)
-        self.icon:SizeToContents()
-        self.icon:SetPos(self.iconBg:GetWide()/2 - self.icon:GetWide()/2, self.iconBg:GetTall()/2 - self.icon:GetTall()/2)
+        -- self.icon:SetPos(self.iconBg:GetWide()/2 - self.icon:GetWide()/2, self.iconBg:GetTall()/2 - self.icon:GetTall()/2)
     else
         self.icon = self.iconBg:Add("DLabel")
         self.icon:SetFont("Roboto24")
@@ -204,7 +206,7 @@ function PANEL:SetItem(item)
                     self:SetItem(ASEEEM_PS.func.GetItemByClass(self.item.class))
                 end)
 
-                if self.item.disposable then
+                if !ASEEEM_PS.func.GetInventoryItemByClass(self.item.class) or ASEEEM_PS.func.GetInventoryItemByClass(self.item.class).amount <= 1 then
                     self:ClosePanel()
                 end
             end)

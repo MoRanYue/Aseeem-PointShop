@@ -38,8 +38,7 @@ end
 function PANEL:SetItem(item)
     self.item = item
 
-    if IsValid(self.icon) then
-        self.icon:Remove()
+    if IsValid(self.iconBg) then
         self.iconBg:Remove()
     end
     if IsValid(self.itemName) then
@@ -99,10 +98,13 @@ function PANEL:SetItem(item)
         self.icon:SetMouseInputEnabled(false)
     elseif self.item.show_txt then
         self.icon = self.iconBg:Add("DLabel")
+        self.icon:SetSize(self.iconBg:GetWide(), self.iconBg:GetTall())
+        self.icon:SetContentAlignment(5)
+        -- self.icon:SetWrap(true)
         self.icon:SetFont("Roboto24")
         self.icon:SetText(self.item.show_txt)
-        self.icon:SizeToContents()
-        self.icon:SetPos(self.iconBg:GetWide()/2 - self.icon:GetWide()/2, self.iconBg:GetTall()/2 - self.icon:GetTall()/2)
+        -- self.icon:SizeToContents()
+        -- self.icon:SetPos(self.iconBg:GetWide()/2 - self.icon:GetWide()/2, self.iconBg:GetTall()/2 - self.icon:GetTall()/2)
     else
         self.icon = self.iconBg:Add("DLabel")
         self.icon:SetFont("Roboto24")
@@ -115,9 +117,9 @@ function PANEL:SetItem(item)
     self.itemDesc:SetColor(ASEEEM_PS.theme.shopItemInfoDescColor)
     self.itemDesc:SetFont('JXZK24')
     self.itemDesc:SetContentAlignment(7)
+    self.itemDesc:SetWrap(true)
     self.itemDesc:SetText(self.item.description)
     self.itemDesc:SetPos(self.iconBg:GetWide() + 20, self.iconBg:GetY())
-    self.itemDesc:SetWrap(true)
     self.itemDesc:SetSize(self:GetWide() - self.itemDesc:GetX() - 10, self.iconBg:GetWide() - 5)
 
     self.buy = self:Add("AButton")
@@ -196,10 +198,12 @@ function PANEL:SetItem(item)
 
     self.purchasableHint = self:Add("DLabel")
     self.purchasableHint:SetColor(ASEEEM_PS.theme.shopItemInfoHintTextColor)
-    if ASEEEM_PS.func.GetNW(LocalPlayer(), 'point') < self.item.price or ASEEEM_PS.func.GetNW(LocalPlayer(), 'proPoint') < self.item.pro_price then
+    if ASEEEM_PS.func.GetNW(LocalPlayer(), 'point') < self.item.price and ASEEEM_PS.func.GetNW(LocalPlayer(), 'proPoint') < self.item.pro_price then
         self.purchasableHint:SetText("#ASEEEM_PS_youCantBuyThis")
-        self.buy:SetDisabled(false)
-    else
+        self.buy:SetDisabled(true)
+    elseif ASEEEM_PS.func.GetNW(LocalPlayer(), 'proPoint') < self.item.pro_price and self.item.pro_point != 0 then
+        self.purchasableHint:SetText(string.format(language.GetPhrase("ASEEEM_PS_AfterBuyingThisYouHavePoint"), ASEEEM_PS.func.GetNW(LocalPlayer(), 'point') - self.item.price))
+    elseif self.item.point != 0 and self.item.pro_point != 0 then
         self.purchasableHint:SetText(string.format(language.GetPhrase("ASEEEM_PS_AfterBuyingThisYouHave"), ASEEEM_PS.func.GetNW(LocalPlayer(), 'point') - self.item.price, ASEEEM_PS.func.GetNW(LocalPlayer(), 'proPoint') - self.item.pro_price))
     end
     self.purchasableHint:SizeToContents()

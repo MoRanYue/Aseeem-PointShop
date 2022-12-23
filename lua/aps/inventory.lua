@@ -5,19 +5,18 @@ util.AddNetworkString("itemsDataUpdated")
 ASEEEM_PS.func.AddHook("PlayerInitialSpawn", "setInventory", function(ply)
     if ply:IsBot() then return end
     --寻找之前该玩家的库存数据，没有就新建
-    if !ply:GetInventory() then
-        ply:SetInventory({
-            steamid = ply:SteamID(),
-            point = ASEEEM_PS.config.ASEEEM_PS.config.newPlayerPoint,
-            pro_point = ASEEEM_PS.config.newPlayerProPoint,
-            inventory = ASEEEM_PS.config.newPlayerInventory
-        }, true, true)
-        ASEEEM_PS.func.SetNW(ply, 'point', ASEEEM_PS.config.newPlayerPoint)
-        ASEEEM_PS.func.SetNW(ply, 'proPoint', ASEEEM_PS.config.newPlayerProPoint)
-        return 
-    end
-    ASEEEM_PS.func.SetNW(ply, 'point', ply:GetPoint())
-    ASEEEM_PS.func.SetNW(ply, 'proPoint', ply:GetProPoint())
+    timer.Simple(1, function()
+        if !ply:GetInventory() then
+            ply:SetInventory({
+                steamid = ply:SteamID(),
+                point = ASEEEM_PS.config.newPlayerPoint,
+                pro_point = ASEEEM_PS.config.newPlayerProPoint,
+                inventory = ASEEEM_PS.config.newPlayerInventory
+            })
+        end
+        ASEEEM_PS.func.SetNW(ply, 'point', ply:GetPoint())
+        ASEEEM_PS.func.SetNW(ply, 'proPoint', ply:GetProPoint())
+    end)
 end)
 
 local plyMeta = FindMetaTable("Player")
@@ -39,8 +38,6 @@ function plyMeta:SetInventory(inv, save, send_to_player)
     local plyInv
 
     for k, v in pairs(ASEEEM_PS.data.playerInventory) do
-        -- print(k)
-        -- PrintTable(v)
         if plySteamid == v.steamid then
             plyInv = v
             ASEEEM_PS.data.playerInventory[k] = inv
@@ -49,16 +46,12 @@ function plyMeta:SetInventory(inv, save, send_to_player)
     end
 
     if !plyInv then
-        if next(plyInv) then
-            ASEEEM_PS.data.playerInventory[k] = inv
-        else
-            table.insert(ASEEEM_PS.data.playerInventory, {
-                steamid = plySteamid,
-                point = inv.point,
-                pro_point = inv.pro_point,
-                inventory = inv.inventory
-            })
-        end
+        table.insert(ASEEEM_PS.data.playerInventory, {
+            steamid = plySteamid,
+            point = inv.point or ASEEEM_PS.config.newPlayerPoint,
+            pro_point = inv.pro_point or ASEEEM_PS.config.newPlayerProPoint,
+            inventory = inv.inventory or ASEEEM_PS.config.newPlayerInventory
+        })
     end
 
     if send_to_player then
@@ -187,14 +180,14 @@ function plyMeta:SetPoint(value, save)
     ASEEEM_PS.func.SetNW(self, 'point', value)
 
     local plyInv = self:GetInventory()
-    if plyInv.point + value <= 0 then
+    if plyInv.point + value < 0 then
         plyInv.point = 0
     else
         plyInv.point = value
     end
     self:SetInventory(plyInv)
 
-    save = save and false or true
+    save = save and save or true
     if save then
         ASEEEM_PS.func.SaveItemData()
     end
@@ -210,7 +203,7 @@ function plyMeta:SetProPoint(val, save)
     end
     self:SetInventory(plyInv)
 
-    save = save and false or true
+    save = save and save or true
     if save then
         ASEEEM_PS.func.SaveItemData()
     end
@@ -236,6 +229,18 @@ function ASEEEM_PS.func.SaveItemData()
 end
 
 function ASEEEM_PS.func.SendInventoryItems(ply)
+    --防止一些Bug
+    if !ply:GetInventory() then
+        ply:SetInventory({
+            steamid = ply:SteamID(),
+            point = ASEEEM_PS.config.newPlayerPoint,
+            pro_point = ASEEEM_PS.config.newPlayerProPoint,
+            inventory = ASEEEM_PS.config.newPlayerInventory
+        })
+        ASEEEM_PS.func.SetNW(ply, 'point', ply:GetPoint())
+        ASEEEM_PS.func.SetNW(ply, 'proPoint', ply:GetProPoint())
+    end
+
     ASEEEM_PS.func.Net('inventoryUpdated', false, 
     { type = ASEEEM_PS.enums.NetType.TABLE, data = ply:GetInventory().inventory, compress = true },
     { type = ASEEEM_PS.enums.NetType.INT, data = ASEEEM_PS.config.inventorySlots })

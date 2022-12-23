@@ -55,11 +55,11 @@ function PANEL:SetItem(item)
         self.icon:SetMouseInputEnabled(false)
     elseif self.item.show_txt then
         self.icon = self:Add("DLabel")
+        self.icon:SetContentAlignment(5)
+        -- self.icon:SetWrap(true)
         self.icon:SetFont("Roboto16")
         self.icon:SetText(self.item.show_txt)
         self.icon:SetSize(self:GetWide(), self:GetTall())
-        self.icon:SetContentAlignment(5)
-        self.icon:SetWrap(true)
     else
         self.icon = self:Add("DLabel")
         self.icon:SetFont("Roboto36")

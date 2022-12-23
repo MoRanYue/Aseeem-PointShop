@@ -1,3 +1,5 @@
+util.AddNetworkString('callAPSMenu')
+
 function ASEEEM_PS.func.GetArgsList(args)
     if isstring(args) then
         return string.Split(args, " ")
@@ -175,6 +177,15 @@ local actions = {
 }
 
 local commands = {
+    ['aps'] = {
+        description = '呼出商店菜单。',
+        usage = '直接在聊天框输入“/aps”。',
+        action = function(args, sender)
+            ASEEEM_PS.func.Net('callAPSMenu')
+            ASEEEM_PS.func.NetSend(sender)
+        end
+    },
+
     ['aps_help'] = {
         description = '获取所有命令的信息和用法。',
         usage = '没有参数',
@@ -182,7 +193,7 @@ local commands = {
             msg = '帮助信息\n'
 
             for cmd, info in pairs(ASEEEM_PS.commands.commands) do
-                msg = msg .. ' ' .. cmd .. '\n'
+                msg = msg .. ' /' .. cmd .. '\n'
                 msg = msg .. '  描述：' .. info.description .. '\n'
                 msg = msg .. '   用法：' .. info.usage .. '\n'
             end

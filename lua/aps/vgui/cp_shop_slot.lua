@@ -89,10 +89,16 @@ function PANEL:SetItem(item)
         self.icon:SetMouseInputEnabled(false)
     elseif self.shopItem.show_txt then
         self.icon = self:Add("DLabel")
+        self.icon:SetContentAlignment(5)
+        -- self.icon:SetWrap(true)
         self.icon:SetFont("Roboto24")
         self.icon:SetText(self.shopItem.show_txt)
-        self.icon:SizeToContents()
-        self.icon:SetPos(self:GetWide()/2 - self.icon:GetWide()/2, (self:GetTall() - 50)/2 - self.icon:GetTall()/2)
+        self.icon:SetSize(self:GetWide(), self:GetTall() - 50)
+        -- self.icon.Paint = function(s, w, h)
+            -- draw.RoundedBox(0, 0, 0, w, h, color_white)
+        -- end
+        -- self.icon:SizeToContents()
+        -- self.icon:SetPos(self:GetWide()/2 - self.icon:GetWide()/2, (self:GetTall() - 50)/2 - self.icon:GetTall()/2)
     else
         self.icon = self:Add("DLabel")
         self.icon:SetFont("Roboto24")
