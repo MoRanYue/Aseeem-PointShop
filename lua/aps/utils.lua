@@ -7,6 +7,15 @@ end
 function ASEEEM_PS.func.RunHook(ev, ...)
     return hook.Run(ev, ...)
 end
+function ASEEEM_PS.func.AddCHook(ev, id, func)
+    hook.Add('Aseeem_PS_' .. ev, 'Aseeem_PS_' .. ev .. '_' .. id, func)
+end
+function ASEEEM_PS.func.RemoveCHook(ev, id)
+    hook.Remove('Aseeem_PS_' .. ev, "Aseeem_PS_" .. ev .. "_" .. id)
+end
+function ASEEEM_PS.func.RunCHook(ev, ...)
+    return hook.Run('Aseeem_PS_' .. ev, ...)
+end
 
 function ASEEEM_PS.func.SetPData(ply, id, value)
     return ply:SetPData("Aseeem_PS_" .. id, value)

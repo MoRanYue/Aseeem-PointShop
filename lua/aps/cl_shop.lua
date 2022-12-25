@@ -22,10 +22,12 @@ end
 
 function ASEEEM_PS.func.GetItemTypeByItemClass(item_class)
     for k, v in pairs(ASEEEM_PS.data.itemTypes) do
+        if !ASEEEM_PS.func.GetItemByClass(item_class) then return nil end
         if ASEEEM_PS.func.GetItemByClass(item_class).type == k then
             return v
         end
     end
+    return nil
 end
 function ASEEEM_PS.func.GetItemTypeByItem(item)
     return ASEEEM_PS.data.itemTypes[item.type]

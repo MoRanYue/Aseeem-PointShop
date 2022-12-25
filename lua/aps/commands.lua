@@ -48,12 +48,12 @@ local actions = {
             end
             players = string.TrimRight(players, '，')
             return ASEEEM_PS.func.CommandOutput('找到了多个玩家：' .. players .. '。', sender)
-        elseif ply and IsValid(ply) then
+        elseif IsValid(ply) and !ply:IsBot() then
             ply:SetPoint(tonumber(args[3]))
 
-            ASEEEM_PS.func.CommandOutput('已把 ' .. ply:Name() .. ' 的点数设置为 ' .. args[2] .. ' 。', sender)
-            ASEEEM_PS.func.CommandOutput(sender:Name() .. ' 把 ' .. ply:Name() .. ' 的点数设置为 ' .. args[2] .. ' 。')
-            return ASEEEM_PS.func.CommandOutput(sender:Name() .. ' 把你的点数设置为了 ' .. args[2] .. ' 。', ply)
+            ASEEEM_PS.func.CommandOutput('已把 ' .. ply:Name() .. ' 的点数设置为 ' .. tostring(ply:GetPoint()) .. ' 。', sender)
+            ASEEEM_PS.func.CommandOutput(sender:Name() .. ' 把 ' .. ply:Name() .. ' 的点数设置为 ' .. tostring(ply:GetPoint()) .. ' 。')
+            return ASEEEM_PS.func.CommandOutput(sender:Name() .. ' 把你的点数设置为了 ' .. tostring(ply:GetPoint()) .. ' 。', ply)
         else
             return ASEEEM_PS.func.CommandOutput('未找到玩家。', sender)
         end
@@ -72,7 +72,7 @@ local actions = {
             end
             players = string.TrimRight(players, '，')
             return ASEEEM_PS.func.CommandOutput('找到了多个玩家：' .. players .. '。', sender)
-        elseif ply and IsValid(ply) then
+        elseif IsValid(ply) and !ply:IsBot() then
             ply:IncreasePoint(tonumber(args[3]))
 
             ASEEEM_PS.func.CommandOutput('已把 ' .. ply:Name() .. ' 的点数增加到 ' .. tostring(ply:GetPoint()) .. ' 。', sender)
@@ -94,7 +94,7 @@ local actions = {
             end
             players = string.TrimRight(players, '，')
             return ASEEEM_PS.func.CommandOutput('找到了多个玩家：' .. players .. '。', sender)
-        elseif ply and IsValid(ply) then
+        elseif IsValid(ply) and !ply:IsBot() then
             ply:DecreasePoint(tonumber(args[3]))
 
             ASEEEM_PS.func.CommandOutput('已把 ' .. ply:Name() .. ' 的点数减少到 ' .. tostring(ply:GetPoint()) .. ' 。', sender)
@@ -118,12 +118,12 @@ local actions = {
             end
             players = string.TrimRight(players, '，')
             return ASEEEM_PS.func.CommandOutput('找到了多个玩家：' .. players .. '。', sender)
-        elseif ply and IsValid(ply) then
+        elseif IsValid(ply) and !ply:IsBot() then
             ply:SetProPoint(tonumber(args[3]))
 
-            ASEEEM_PS.func.CommandOutput('已把 ' .. ply:Name() .. ' 的高级点数设置为 ' .. args[2] .. ' 。', sender)
-            ASEEEM_PS.func.CommandOutput(sender:Name() .. ' 把 ' .. ply:Name() .. ' 的高级点数设置为 ' .. args[2] .. ' 。')
-            return ASEEEM_PS.func.CommandOutput(sender:Name() .. ' 把你的高级点数设置为了 ' .. args[2] .. ' 。', ply)
+            ASEEEM_PS.func.CommandOutput('已把 ' .. ply:Name() .. ' 的高级点数设置为 ' .. tostring(ply:GetProPoint()) .. ' 。', sender)
+            ASEEEM_PS.func.CommandOutput(sender:Name() .. ' 把 ' .. ply:Name() .. ' 的高级点数设置为 ' .. tostring(ply:GetProPoint()) .. ' 。')
+            return ASEEEM_PS.func.CommandOutput(sender:Name() .. ' 把你的高级点数设置为了 ' .. tostring(ply:GetProPoint()) .. ' 。', ply)
         else
             return ASEEEM_PS.func.CommandOutput('未找到玩家。', sender)
         end
@@ -141,7 +141,7 @@ local actions = {
             end
             players = string.TrimRight(players, '，')
             return ASEEEM_PS.func.CommandOutput('找到了多个玩家：' .. players .. '。', sender)
-        elseif ply and IsValid(ply) then
+        elseif IsValid(ply) and !ply:IsBot() then
             ply:IncreaseProPoint(tonumber(args[3]))
 
             ASEEEM_PS.func.CommandOutput('已把 ' .. ply:Name() .. ' 的高级点数增加到 ' .. tostring(ply:GetProPoint()) .. ' 。', sender)
@@ -164,7 +164,7 @@ local actions = {
             end
             players = string.TrimRight(players, '，')
             return ASEEEM_PS.func.CommandOutput('找到了多个玩家：' .. players .. '。', sender)
-        elseif ply and IsValid(ply) then
+        elseif IsValid(ply) and !ply:IsBot() then
             ply:DecreaseProPoint(tonumber(args[3]))
 
             ASEEEM_PS.func.CommandOutput('已把 ' .. ply:Name() .. ' 的高级点数减少到 ' .. tostring(ply:GetProPoint()) .. ' 。', sender)
@@ -264,16 +264,18 @@ ASEEEM_PS.func.AddHook('PlayerSay', 'Commands', function(ply, text, t_chat)
         if string.lower(cmd) == command then
             if info.need_access then
                 CAMI.PlayerHasAccess(ply, 'Aseeem PointShop Access', function(has_access, access_string)
-                    if has_access and info.need_privilege then 
-                        CAMI.PlayerHasAccess(ply, info.need_privilege, function(has_add_access, access_string)
-                            if has_add_access then
-                                info.action(argument, ply)
-                            else
-                                ASEEEM_PS.func.CommandOutput('权限不足，需要权限 ' .. info.need_privilege .. ' 。', sender)
-                            end
-                        end)
-                    elseif has_access then
-                        info.action(argument, ply)
+                    if has_access then 
+                        if info.need_privilege then
+                            CAMI.PlayerHasAccess(ply, info.need_privilege, function(has_add_access, access_string)
+                                if has_add_access then
+                                    info.action(argument, ply)
+                                else
+                                    ASEEEM_PS.func.CommandOutput('权限不足，需要权限 ' .. info.need_privilege .. ' 。', sender)
+                                end
+                            end)
+                        else
+                            info.action(argument, ply)
+                        end
                     else 
                         ASEEEM_PS.func.CommandOutput('权限不足，需要权限 Aseeem PointShop Access 。', sender)
                     end

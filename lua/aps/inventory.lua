@@ -2,20 +2,28 @@ util.AddNetworkString("requestInventory")
 util.AddNetworkString("inventoryUpdated")
 util.AddNetworkString("itemsDataUpdated")
 
-ASEEEM_PS.func.AddHook("PlayerInitialSpawn", "setInventory", function(ply)
+
+ASEEEM_PS.func.AddCHook('PlayerFullyConnected', 'setupPlayerInventory', function(ply)
     if ply:IsBot() then return end
     --寻找之前该玩家的库存数据，没有就新建
-    timer.Simple(1, function()
-        if !ply:GetInventory() then
-            ply:SetInventory({
-                steamid = ply:SteamID(),
-                point = ASEEEM_PS.config.newPlayerPoint,
-                pro_point = ASEEEM_PS.config.newPlayerProPoint,
-                inventory = ASEEEM_PS.config.newPlayerInventory
-            })
+    if !ply:GetInventory() then
+        ply:SetInventory({
+            steamid = ply:SteamID(),
+            point = ASEEEM_PS.config.newPlayerPoint,
+            pro_point = ASEEEM_PS.config.newPlayerProPoint,
+            inventory = ASEEEM_PS.config.newPlayerInventory
+        })
+    end
+    ASEEEM_PS.func.SetNW(ply, 'point', ply:GetPoint())
+    ASEEEM_PS.func.SetNW(ply, 'proPoint', ply:GetProPoint())
+end)
+ASEEEM_PS.func.AddHook("PlayerInitialSpawn", "setupInventory", function(ply)
+    --因为这个钩子调用时玩家并没有完全进入游戏，解决这个问题
+    ASEEEM_PS.func.AddHook('SetupMove', ply, function(s, valid_ply, _, cmd)
+        if s == valid_ply and !cmd:IsForced() then
+            ASEEEM_PS.func.RunCHook('PlayerFullyConnected', s)
+            ASEEEM_PS.func.RemoveHook('SetupMove', s)
         end
-        ASEEEM_PS.func.SetNW(ply, 'point', ply:GetPoint())
-        ASEEEM_PS.func.SetNW(ply, 'proPoint', ply:GetProPoint())
     end)
 end)
 
