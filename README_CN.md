@@ -1,4 +1,3 @@
-<!--![Logo](https://raw.githubusercontent.com/Kamisato-Ayaka-233/Aseeem-PointShop/main/ASEEEM.png) -->
 ![Aseeem-PointShop](https://socialify.git.ci/Kamisato-Ayaka-233/Aseeem-PointShop/image?description=1&font=KoHo&logo=https%3A%2F%2Fs1.ax1x.com%2F2022%2F11%2F16%2FzVfpjK.png&name=1&owner=1&pattern=Diagonal%20Stripes&theme=Dark)
 
 <div align="center">
@@ -7,7 +6,10 @@
   <img src="https://img.shields.io/github/v/release/Kamisato-Ayaka-233/Aseeem-PointShop?style=for-the-badge" alt="release">
 </div>
 
-[简体中文](README_CN.md) [English](README.md)
+<div align="center">
+  <a href="README.md" title="English">English</a> 
+  <a href="README_CN.md" title="简体中文">简体中文</a>
+</div>
 
 ---
 
@@ -32,3 +34,10 @@
 * 非常的小。
 
 终于，基本的功能都完成了。
+
+-----
+
+## 怎么用？
+
+[这里。](https://github.com/Kamisato-Ayaka-233/Aseeem-PointShop/wiki)
+
