@@ -7,7 +7,10 @@
   <img src="https://img.shields.io/github/v/release/Kamisato-Ayaka-233/Aseeem-PointShop?style=for-the-badge" alt="release">
 </div>
 
-[简体中文](README_CN.md) [English](README.md)
+<div align="center">
+  <a href="README.md" title="English">English</a> 
+  <a href="README_CN.md" title="简体中文">简体中文</a>
+</div>
 
 ---
 
