@@ -32,3 +32,8 @@ It's like the PointShop2.
 
 **NOW** it completed basic functions
 
+-----
+
+## How to use it?
+
+[Here you are.](https://github.com/Kamisato-Ayaka-233/Aseeem-PointShop/wiki)
