@@ -1,17 +1,33 @@
-function ASEEEM_PS.func.AddHook(ev, id, func) 
-    hook.Add(ev, "Aseeem_PS_" .. ev .. "_" .. id, func)
+function ASEEEM_PS.func.AddHook(ev, id, func)
+    if isstring(id) then
+        hook.Add(ev, "Aseeem_PS_" .. ev .. "_" .. id, func)
+    else
+        hook.Add(ev, id, func)
+    end
 end
 function ASEEEM_PS.func.RemoveHook(ev, id)
-    hook.Remove(ev, "Aseeem_PS_" .. ev .. "_" .. id)
+    if isstring(id) then
+        hook.Remove(ev, "Aseeem_PS_" .. ev .. "_" .. id, func)
+    else
+        hook.Remove(ev, id, func)
+    end
 end
 function ASEEEM_PS.func.RunHook(ev, ...)
     return hook.Run(ev, ...)
 end
 function ASEEEM_PS.func.AddCHook(ev, id, func)
-    hook.Add('Aseeem_PS_' .. ev, 'Aseeem_PS_' .. ev .. '_' .. id, func)
+    if isstring(id) then
+        hook.Add('Aseeem_PS_' .. ev, 'Aseeem_PS_' .. ev .. '_' .. id, func)
+    else
+        hook.Add('Aseeem_PS_' .. ev, id, func)
+    end
 end
 function ASEEEM_PS.func.RemoveCHook(ev, id)
-    hook.Remove('Aseeem_PS_' .. ev, "Aseeem_PS_" .. ev .. "_" .. id)
+    if isstring(id) then
+        hook.Remove('Aseeem_PS_' .. ev, 'Aseeem_PS_' .. ev .. '_' .. id, func)
+    else
+        hook.Remove('Aseeem_PS_' .. ev, id, func)
+    end
 end
 function ASEEEM_PS.func.RunCHook(ev, ...)
     return hook.Run('Aseeem_PS_' .. ev, ...)

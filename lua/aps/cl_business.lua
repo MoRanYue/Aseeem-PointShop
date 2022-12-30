@@ -27,7 +27,6 @@ ASEEEM_PS.func.NetReceive('clientItemFunc', function(lem, data)
             ASEEEM_PS.func.ReadItemTypesData()
 
             local itemType = ASEEEM_PS.func.GetItemTypeByItemClass(itemClass)
-            PrintTable(itemType)
 
             if itemType and itemType.client then
                 if run == 'on_equip' and itemType.client.on_equip then

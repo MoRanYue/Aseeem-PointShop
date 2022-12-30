@@ -19,10 +19,10 @@ ASEEEM_PS.func.AddCHook('PlayerFullyConnected', 'setupPlayerInventory', function
 end)
 ASEEEM_PS.func.AddHook("PlayerInitialSpawn", "setupInventory", function(ply)
     --因为这个钩子调用时玩家并没有完全进入游戏，解决这个问题
-    ASEEEM_PS.func.AddHook('SetupMove', ply, function(s, valid_ply, _, cmd)
-        if s == valid_ply and !cmd:IsForced() then
+    ASEEEM_PS.func.AddHook('SetupMove', ply, function(s, pl, _, cmd)
+        if s == pl and !cmd:IsForced() then
             ASEEEM_PS.func.RunCHook('PlayerFullyConnected', s)
-            ASEEEM_PS.func.RemoveHook('SetupMove', s)
+            ASEEEM_PS.func.RemoveHook('SetupMove', s) --删除这个钩子
         end
     end)
 end)
