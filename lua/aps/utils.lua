@@ -141,3 +141,21 @@ function ASEEEM_PS.func.FindPlayersByRegex(pattern)
         return foundPlayers
     end
 end
+
+function ASEEEM_PS.func.TablesAreEqual(tbl_a, tbl_b)
+    local a, b = 0, 0
+    for ak, av in pairs(tbl_a) do
+        a = a + 1
+    end
+    for bk, bv in pairs(tbl_b) do
+        b = b + 1
+    end
+    if a != b then return false end
+
+    for ak, av in pairs(tbl_a) do
+        if av != tbl_b[ak] then return false end
+        -- if istable(av) then ASEEEM_PS.func.TablesAreEqual(av, tbl_b[ak]) end
+    end
+
+    return true
+end

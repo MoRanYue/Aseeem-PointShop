@@ -63,7 +63,9 @@ function ASEEEM_PS.func.ReadPlayerInvData()
                     break
                 end
             end
-            if !isValid then
+            if isValid then
+                ASEEEM_PS.data.playerInventory[k].inventory[l].is_valid = true
+            else
                 ASEEEM_PS.data.playerInventory[k].inventory[l].is_valid = false
             end
         end
@@ -83,3 +85,52 @@ concommand.Add('aseeem_ps_refresh_data', function()
     ASEEEM_PS.func.ReadItemsData()
     ASEEEM_PS.func.ReadPlayerInvData()
 end)
+
+-- if ASEEEM_PS.config.checkingFilesTimer then
+--     if timer.Exists('Aseeem_PS_checkFiles') then
+--         timer.Remove('Aseeem_PS_checkFiles')
+--     end
+
+--     timer.Create('Aseeem_PS_checkFiles', ASEEEM_PS.config.checkingFilesTimer, 0, function()
+--         print('[Aseeem Pointshop] 检测到玩家库存文件更新。')
+--         local playerInventory = util.JSONToTable(file.Read("aseeem_pointshop/player_inventory.json", "DATA"))
+--         local items = util.JSONToTable(file.Read("aseeem_pointshop/items.json", "DATA"))
+--         if !playerInventory then
+--             MsgC(Color(23, 23, 255), "[Aseeem Pointshop] 错误：玩家库存文件格式错误！读取失败。")
+--             return
+--         end
+--         if !items then
+--             MsgC(Color(23, 23, 255), "[Aseeem Pointshop] 错误：物品文件格式错误！读取失败。")
+--             return
+--         end
+
+--         if !ASEEEM_PS.func.TablesAreEqual(items, ASEEEM_PS.data.items) then
+--             MsgC(Color(255, 128, 0), "[Aseeem Pointshop] 检测到物品文件更新。")
+
+--             ASEEEM_PS.data.items = items
+--         end
+
+--         if ASEEEM_PS.func.TablesAreEqual(playerInventory, ASEEEM_PS.data.playerInventory) then 
+--             MsgC(Color(255, 128, 0), "[Aseeem Pointshop] 检测到玩家库存文件更新。")
+
+--             ASEEEM_PS.data.playerInventory = playerInventory
+
+--             for k, v in pairs(ASEEEM_PS.data.playerInventory) do
+--                 for l, w in pairs(v.inventory) do
+--                     local isValid = false
+--                     for _, x in pairs(ASEEEM_PS.data.items) do
+--                         if x.class == w.class then
+--                             isValid = true
+--                             break
+--                         end
+--                     end
+--                     if isValid then
+--                         ASEEEM_PS.data.playerInventory[k].inventory[l].is_valid = true
+--                     else
+--                         ASEEEM_PS.data.playerInventory[k].inventory[l].is_valid = false
+--                     end
+--                 end
+--             end
+--         end
+--     end)
+-- end

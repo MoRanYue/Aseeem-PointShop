@@ -4,10 +4,16 @@ include('aps/config.lua')
 if string.lower(ASEEEM_PS.config.whereResource) == 'workshop' then
     resource.AddWorkshop("2266031603")
 elseif string.lower(ASEEEM_PS.config.whereResource) == 'server' then
+    --图标 Icons
     resource.AddFile('materials/aps/disable.png')
     resource.AddFile('materials/aps/point.png')
     resource.AddFile('materials/aps/pro_point.png')
     resource.AddFile('materials/aps/equipped.png')
+
+    --翻译 Localization files
+    resource.AddFile("resource/localization/en/aseeem_ps.properties")
+    resource.AddFile("resource/localization/zh-CN/aseeem_ps.properties")
+    resource.AddFile("resource/localization/zh-TW/aseeem_ps.properties")
 
     --字体 Fonts
     resource.AddFile("resource/fonts/jiangxizhuokai.ttf")
@@ -15,15 +21,10 @@ elseif string.lower(ASEEEM_PS.config.whereResource) == 'server' then
     resource.AddFile("resource/fonts/hanyiwenhei.ttf")
     resource.AddFile("resource/fonts/hanyizhuxinkai.ttf")
     resource.AddFile("resource/fonts/kaiti.ttf")
-
-    resource.AddFile("resource/localization/en/aseeem_ps.properties")
-    resource.AddFile("resource/localization/zh-CN/aseeem_ps.properties")
-    resource.AddFile("resource/localization/zh-TW/aseeem_ps.properties")
-
 end
 
 if ASEEEM_PS.config.additionalResource then
-    --尾迹文件
+    --尾迹文件 Trail materials
     resource.AddWorkshop("846689879")
 end
 

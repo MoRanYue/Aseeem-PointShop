@@ -1,7 +1,9 @@
 ASEEEM_PS.config = ASEEEM_PS.config or {}
 
-ASEEEM_PS.config.whereResource = 'workshop' -- “workshop”/“server”
+ASEEEM_PS.config.whereResource = 'server' -- How can you send those resources to clients? “workshop”/“server”
 ASEEEM_PS.config.additionalResource = true
+
+ASEEEM_PS.config.checkingFilesTimer = 1 -- Timer of checking items/inventory data files, if you want it's disabled, set it to false
 
 ASEEEM_PS.config.inventorySlots = 40
 
