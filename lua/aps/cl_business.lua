@@ -20,29 +20,14 @@ ASEEEM_PS.func.NetReceive('clientItemFunc', function(lem, data)
     local run = data[2]
     local first = data[3]
 
-    print(itemClass)
-
     if first then
-        timer.Simple(10, function()
-            ASEEEM_PS.func.ReadItemTypesData()
+        ASEEEM_PS.func.ReadItemTypesData()
+    end
 
-            local itemType = ASEEEM_PS.func.GetItemTypeByItemClass(itemClass)
+    local itemType = ASEEEM_PS.func.GetItemTypeByItemClass(itemClass)
 
-            if itemType and itemType.client then
-                if run == 'on_equip' and itemType.client.on_equip then
-                    return itemType.client.on_equip(ASEEEM_PS.func.GetItemByClass(itemClass), ASEEEM_PS.func.GetInventoryItemByClass(itemClass))
-                end
-            end
-        end)
-    else
-        local itemType = ASEEEM_PS.func.GetItemTypeByItemClass(itemClass)
-        -- PrintTable(itemType)
-
-        if itemType and itemType.client then
-            if run == 'on_equip' and itemType.client.on_equip then
-                return itemType.client.on_equip(ASEEEM_PS.func.GetItemByClass(itemClass), ASEEEM_PS.func.GetInventoryItemByClass(itemClass))
-            end
-        end
+    if itemType and itemType.client and itemType.client[run] then
+        return itemType.client[run](ASEEEM_PS.func.GetItemByClass(itemClass), ASEEEM_PS.func.GetInventoryItemByClass(itemClass))
     end
 end)
 

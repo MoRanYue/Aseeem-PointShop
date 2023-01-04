@@ -34,7 +34,7 @@ texthat.on_equip = function(item, inv_item)
                         ["Color"] = color,
                         ["OutlineColor"] = outline,
                         ["Angles"] = Angle(90, -82.253997802734, 5.1226412324468e-005),
-                        ["Text"] = "Example Text",
+                        ["Text"] = 'Example Text',
                     },
                 },
             },

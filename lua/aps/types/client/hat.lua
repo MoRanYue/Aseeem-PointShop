@@ -2,7 +2,6 @@ local hat = {}
 hat.data = hat.data or {}
 
 hat.on_buy = function(item, inv_item)
-    EmitSound('phx/explode00.wav')
 end
 hat.on_equip = function(item, inv_item)
     local ply = LocalPlayer()

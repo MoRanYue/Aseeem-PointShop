@@ -204,7 +204,7 @@ function plyMeta:SetProPoint(val, save)
     ASEEEM_PS.func.SetNW(self, 'proPoint', val)
 
     local plyInv = self:GetInventory()
-    if plyInv.pro_point + val <= 0 then
+    if plyInv.pro_point + val < 0 then
         plyInv.pro_point = 0
     else
         plyInv.pro_point = val
@@ -223,10 +223,10 @@ function plyMeta:IncreaseProPoint(val, save)
     self:SetProPoint(self:GetProPoint() + val, save)
 end
 function plyMeta:DecreasePoint(val, save)
-    self:IncreasePoint(0-val, save)
+    self:IncreasePoint(-val, save)
 end
 function plyMeta:DecreaseProPoint(val, save)
-    self:IncreaseProPoint(0-val, save)
+    self:IncreaseProPoint(-val, save)
 end
 
 function ASEEEM_PS.func.SaveItemData()

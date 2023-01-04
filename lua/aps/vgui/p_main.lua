@@ -13,7 +13,7 @@ function ASEEEM_PS.func.openMenu()
     end
 
     local scrw, scrh = ScrW(), ScrH()
-    local frameW, frameH, animTime, animDelay, animEase = scrw*0.45, scrh*0.6, 1.8, 0, .1
+    local frameW, frameH, animTime, animDelay, animEase = 1152, 648, 1.8, 0, .1
 
     --检测是否已经存在
     if ASEEEM_PS.func.checkMenu() then
@@ -689,22 +689,5 @@ end
 function ASEEEM_PS.func.checkMenu()
     return IsValid(ASEEEM_PS.menu.frame)
 end
-
---控制台打开
-concommand.Add("aseeem_ps", ASEEEM_PS.func.openMenu)
-
---聊天命令打开
-ASEEEM_PS.func.AddHook("OnPlayerChat", "openShopMenu", function(ply, text, t_chat, is_dead)
-    if string.gsub(string.Trim(string.lower(text)), '!', '/') == "/aps" then
-        ASEEEM_PS.func.openMenu()
-    end
-end)
-
---F3打开，O键打开
-ASEEEM_PS.func.AddHook("PlayerButtonDown", "openShopMenuUseKey", function(ply, btn)
-    if btn == KEY_F3 or btn == KEY_O then
-        ASEEEM_PS.func.openMenu()
-    end
-end)
 
 ASEEEM_PS.func.NetReceive('callAPSMenu', ASEEEM_PS.func.openMenu)

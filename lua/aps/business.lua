@@ -11,15 +11,14 @@ util.AddNetworkString("clientItemFunc")
 --     error = STRING 错误信息
 -- }
 
-ASEEEM_PS.func.AddHook("PlayerInitialSpawn", "setupEquippedItems", function(ply)
+ASEEEM_PS.func.AddCHook('PlayerFullyConnectedBussiness', 'setupEquippedItems', function(ply)
     if ply:IsBot() then return end
 
     local plyInv = ply:GetInventory()
-    
     if plyInv then
         local plyInvInventory = plyInv.inventory
         for _, v in pairs(plyInv.inventory) do
-            if v.equipped and v.is_valid then
+            if v.is_valid and v.equipped then
                 local _, item = ASEEEM_PS.func.GetItem(v.class)
                 local success, error = pcall(ASEEEM_PS.data.itemTypes[item.type].on_equip, item, ply, v)
                 if success then
@@ -34,6 +33,15 @@ ASEEEM_PS.func.AddHook("PlayerInitialSpawn", "setupEquippedItems", function(ply)
             end
         end
     end
+end)
+ASEEEM_PS.func.AddHook("PlayerInitialSpawn", "setupInventory", function(ply)
+    --因为这个钩子调用时玩家并没有完全进入游戏，解决这个问题
+    ASEEEM_PS.func.AddHook('SetupMove', ply, function(s, pl, _, cmd)
+        if s == pl and !cmd:IsForced() then
+            ASEEEM_PS.func.RunCHook('PlayerFullyConnectedBussiness', s)
+            ASEEEM_PS.func.RemoveHook('SetupMove', s) --删除这个钩子
+        end
+    end)
 end)
 
 ASEEEM_PS.func.NetReceive('itemOperation', function(ply, len, data)
