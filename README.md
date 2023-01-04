@@ -21,6 +21,8 @@
 
 This is a new Garry's mod point shop, I call it "Aseeem PointShop".  
 
+[Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2896292164)
+
 ## Featured
 
 It's like the PointShop2.
