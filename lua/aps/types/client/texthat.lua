@@ -1,9 +1,5 @@
 local texthat = {}
 
-if ASEEEM_PS.data.itemTypes.texthat and ASEEEM_PS.data.itemTypes.texthat.client then
-    texthat.data = ASEEEM_PS.data.itemTypes.texthat.client.data or {}
-end
-
 texthat.on_buy = function(item, inv_item)
 end
 texthat.on_equip = function(item, inv_item)
@@ -48,13 +44,10 @@ texthat.on_equip = function(item, inv_item)
         },
     }
 
-    PrintTable(inv_item)
-    print(CurTime())
-
-    ASEEEM_PS.data.itemTypes.texthat.client.data.text = inv_item['data'] and inv_item['data'][1] or 'EXAMPLE TEXT'
-    ASEEEM_PS.data.itemTypes.texthat.client.data.color = color
-    ASEEEM_PS.data.itemTypes.texthat.client.data.rainbow = rainbow
-    ASEEEM_PS.data.itemTypes.texthat.client.data.outfit = baseOutfit
+    ply.texthatText = inv_item['data'] and inv_item['data'][1] or 'EXAMPLE TEXT'
+    ply.texthatColor = color
+    ply.texthatRainbow = rainbow
+    ply.texthatOutfit = baseOutfit
 
     if !ply.AttachPACPart then
         if !pac then
@@ -62,7 +55,7 @@ texthat.on_equip = function(item, inv_item)
             return 
         end
         pac.SetupENT(ply)
-        ply:SetShowPACPartsInEditor( false )
+        ply:SetShowPACPartsInEditor(false)
     end
 
     ply:AttachPACPart(baseOutfit, ply)
@@ -70,14 +63,16 @@ texthat.on_equip = function(item, inv_item)
     ASEEEM_PS.func.AddHook('Think', 'TEXTHAT', function()
         local ply = LocalPlayer()
 
-        if ply.FindPACPart and ASEEEM_PS.data.itemTypes.texthat.client then
-            ply.textPart = ply:FindPACPart(ASEEEM_PS.data.itemTypes.texthat.client.data.outfit, "APS_Texthat")
+        if ply.FindPACPart and ply.texthatOutfit then
+            ply.textPart = ply:FindPACPart(ply.texthatOutfit, "APS_Texthat")
         end
 
         if IsValid(ply.textPart) then
-            ply.textPart:SetText(tostring(ASEEEM_PS.data.itemTypes.texthat.client.data.text))
-            if ASEEEM_PS.data.itemTypes.texthat.client.data.rainbow then
+            ply.textPart:SetText(tostring(ply.texthatText))
+            if ply.texthatRainbow then
                 ply.textPart:SetColor(HSVToColor(RealTime() *20 % 360, 1, 1))
+            else
+                ply.textPart:SetColor(ply.texthatColor)
             end
         end
     end)
@@ -87,8 +82,8 @@ texthat.on_unequip = function(item, inv_item)
 
     ASEEEM_PS.func.RemoveHook('Think', 'TEXTHAT')
 
-    if ply.RemovePACPart then
-        ply:RemovePACPart(ASEEEM_PS.data.itemTypes.texthat.client.data.outfit)
+    if ply.RemovePACPart and ply.texthatOutfit then
+        ply:RemovePACPart(ply.texthatOutfit)
     end
 end
 texthat.on_sell = function(item, inv_item)
@@ -100,4 +95,5 @@ end
 
 ASEEEM_PS.data.itemTypes.texthat = ASEEEM_PS.data.itemTypes.texthat or {}
 ASEEEM_PS.data.itemTypes.texthat.client = texthat
+ASEEEM_PS.data.itemTypes.texthat.client.data = ASEEEM_PS.data.itemTypes.texthat.client.data or {}
 

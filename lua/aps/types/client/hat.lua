@@ -1,5 +1,4 @@
 local hat = {}
-hat.data = hat.data or {}
 
 hat.on_buy = function(item, inv_item)
 end
@@ -74,9 +73,13 @@ hat.on_equip = function(item, inv_item)
         },
     }
 
-    ASEEEM_PS.data.itemTypes.hat.client.data.outfit = baseOutfit
+    ply.hatOutfit = baseOutfit
 
     if !ply.AttachPACPart then
+        if !pac then
+            LocalPlayer():PrintMessage(HUD_PRINTTALK, '[Aseeem 点数商店] PAC调用失败。')
+            return 
+        end
         pac.SetupENT(ply)
         ply:SetShowPACPartsInEditor( false )
     end
@@ -86,8 +89,8 @@ end
 hat.on_unequip = function(item, inv_item)
     local ply = LocalPlayer()
 
-    if ply.RemovePACPart then
-        ply:RemovePACPart(ASEEEM_PS.data.itemTypes.hat.client.data.outfit)
+    if ply.RemovePACPart and ply.hatOutfit then
+        ply:RemovePACPart(ply.hatOutfit)
     end
 end
 hat.on_sell = function(item, inv_item)
@@ -99,4 +102,3 @@ end
 
 ASEEEM_PS.data.itemTypes.hat = ASEEEM_PS.data.itemTypes.hat or {}
 ASEEEM_PS.data.itemTypes.hat.client = hat
-

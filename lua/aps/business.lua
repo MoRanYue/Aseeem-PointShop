@@ -11,37 +11,37 @@ util.AddNetworkString("clientItemFunc")
 --     error = STRING 错误信息
 -- }
 
-ASEEEM_PS.func.AddCHook('PlayerFullyConnectedBussiness', 'setupEquippedItems', function(ply)
-    local plyInv = ply:GetInventory()
-    if plyInv then
-        local plyInvInventory = plyInv.inventory
-        for _, v in pairs(plyInv.inventory) do
-            if v.is_valid and v.equipped then
-                local _, item = ASEEEM_PS.func.GetItem(v.class)
-                local success, error = pcall(ASEEEM_PS.data.itemTypes[item.type].on_equip, item, ply, v)
-                if !success then
-                    MsgC(Color(144, 144, 114), "[Aseeem 点数商店] 玩家 " .. ply:Name() .. "（" .. ply:SteamID() .. "）" .. " 在执行物品 " .. v.name .. "（" .. v.class .. "） 的”on_equip“函数时出错！\n" .. error)
-                end
+local loadQueue = {}
+ASEEEM_PS.func.AddHook("PlayerInitialSpawn", "setupEquippedItems", function(ply)
+    --因为这个钩子调用时玩家并没有完全进入游戏，解决这个问题
+    loadQueue[ply] = true 
+end)
+ASEEEM_PS.func.AddHook('SetupMove', 'setupEquippedItemsFinished', function(ply, _, cmd)
+    if loadQueue[ply] and !cmd:IsForced() then
+        loadQueue[ply] = nil 
 
-                timer.Simple(5, function() --需要运行客户端需要运行的“on_equip”函数
-                    ASEEEM_PS.func.Net('clientItemFunc', false, 
-                                { type = ASEEEM_PS.enums.NetType.STRING, data = item.class }, 
-                                { type = ASEEEM_PS.enums.NetType.STRING, data = 'on_equip' },
-                                { type = ASEEEM_PS.enums.NetType.BOOL, data = true })
-                    ASEEEM_PS.func.NetSend(ply)
-                end)
+        local plyInv = ply:GetInventory()
+        if plyInv then
+            local plyInvInventory = plyInv.inventory
+            for _, v in pairs(plyInv.inventory) do
+                if v.is_valid and v.equipped then
+                    local _, item = ASEEEM_PS.func.GetItem(v.class)
+                    local success, error = pcall(ASEEEM_PS.data.itemTypes[item.type].on_equip, item, ply, v)
+                    if !success then
+                        MsgC(Color(144, 144, 114), "[Aseeem 点数商店] 玩家 " .. ply:Name() .. "（" .. ply:SteamID() .. "）" .. " 在执行物品 " .. v.name .. "（" .. v.class .. "） 的”on_equip“函数时出错！\n" .. error)
+                    end
+
+                    timer.Simple(5, function() --需要运行客户端需要运行的“on_equip”函数
+                        ASEEEM_PS.func.Net('clientItemFunc', false, 
+                                    { type = ASEEEM_PS.enums.NetType.STRING, data = item.class }, 
+                                    { type = ASEEEM_PS.enums.NetType.STRING, data = 'on_equip' },
+                                    { type = ASEEEM_PS.enums.NetType.BOOL, data = true })
+                        ASEEEM_PS.func.NetSend(ply)
+                    end)
+                end
             end
         end
     end
-end)
-ASEEEM_PS.func.AddHook("PlayerInitialSpawn", "setupInventory", function(ply)
-    --因为这个钩子调用时玩家并没有完全进入游戏，解决这个问题
-    ASEEEM_PS.func.AddHook('SetupMove', ply, function(s, pl, _, cmd)
-        if s == pl and !cmd:IsForced() then
-            ASEEEM_PS.func.RunCHook('PlayerFullyConnectedBussiness', s)
-            ASEEEM_PS.func.RemoveHook('SetupMove', s) --删除这个钩子
-        end
-    end)
 end)
 
 ASEEEM_PS.func.NetReceive('itemOperation', function(ply, len, data)
@@ -59,12 +59,22 @@ ASEEEM_PS.func.NetReceive('itemOperation', function(ply, len, data)
                 ASEEEM_PS.data.itemTypes[item.type].on_buy(item, ply)
                 ASEEEM_PS.func.Net('itemOperation', false, { type = ASEEEM_PS.enums.NetType.BOOL, data = true })
                 ASEEEM_PS.func.NetSend(ply)
+                ASEEEM_PS.func.Net('clientItemFunc', false, 
+                                { type = ASEEEM_PS.enums.NetType.STRING, data = item.class },
+                                { type = ASEEEM_PS.enums.NetType.STRING, data = 'on_buy' },
+                                { type = ASEEEM_PS.enums.NetType.BOOL, data = false })
+                ASEEEM_PS.func.NetSend(ply)
                 ASEEEM_PS.func.SendInventoryItems(ply)
             elseif opData[1] == ASEEEM_PS.enums.PointType.PROPOINT and ply:GetProPoint() >= item.pro_price then
                 ply:AddInventoryItem(item)
                 ply:DecreaseProPoint(item.pro_price*ASEEEM_PS.config.itemProPriceMultiplier)
                 ASEEEM_PS.data.itemTypes[item.type].on_buy(item, ply)
                 ASEEEM_PS.func.Net('itemOperation', false, { type = ASEEEM_PS.enums.NetType.BOOL, data = true })
+                ASEEEM_PS.func.NetSend(ply)
+                ASEEEM_PS.func.Net('clientItemFunc', false, 
+                                { type = ASEEEM_PS.enums.NetType.STRING, data = item.class }, 
+                                { type = ASEEEM_PS.enums.NetType.STRING, data = 'on_buy' },
+                                { type = ASEEEM_PS.enums.NetType.BOOL, data = false })
                 ASEEEM_PS.func.NetSend(ply)
                 ASEEEM_PS.func.SendInventoryItems(ply)
             else
@@ -89,6 +99,11 @@ ASEEEM_PS.func.NetReceive('itemOperation', function(ply, len, data)
             ASEEEM_PS.data.itemTypes[itm.type].on_sell(itm, ply)
             ASEEEM_PS.func.Net('itemOperation', false, 
                 { type = ASEEEM_PS.enums.NetType.BOOL, data = true })
+            ASEEEM_PS.func.NetSend(ply)
+            ASEEEM_PS.func.Net('clientItemFunc', false, 
+                                { type = ASEEEM_PS.enums.NetType.STRING, data = item.class }, 
+                                { type = ASEEEM_PS.enums.NetType.STRING, data = 'on_sell' },
+                                { type = ASEEEM_PS.enums.NetType.BOOL, data = false })
             ASEEEM_PS.func.NetSend(ply)
             ASEEEM_PS.func.SendInventoryItems(ply)
         else
@@ -125,6 +140,11 @@ ASEEEM_PS.func.NetReceive('itemOperation', function(ply, len, data)
             ASEEEM_PS.func.Net('itemOperation', false, 
                 { type = ASEEEM_PS.enums.NetType.BOOL, data = true })
             ASEEEM_PS.func.NetSend(ply)
+            ASEEEM_PS.func.Net('clientItemFunc', false, 
+                                { type = ASEEEM_PS.enums.NetType.STRING, data = item.class }, 
+                                { type = ASEEEM_PS.enums.NetType.STRING, data = 'on_equip' },
+                                { type = ASEEEM_PS.enums.NetType.BOOL, data = false })
+            ASEEEM_PS.func.NetSend(ply)
             ASEEEM_PS.func.SendInventoryItems(ply)
         else
             ASEEEM_PS.func.Net('itemOperation', false, 
@@ -141,6 +161,11 @@ ASEEEM_PS.func.NetReceive('itemOperation', function(ply, len, data)
             ASEEEM_PS.data.itemTypes[itm.type].on_unequip(itm, ply, ply:GetInventoryItemByClass(opData[1]))
             ASEEEM_PS.func.Net('itemOperation', false, 
                 { type = ASEEEM_PS.enums.NetType.BOOL, data = true })
+            ASEEEM_PS.func.NetSend(ply)
+            ASEEEM_PS.func.Net('clientItemFunc', false, 
+                                { type = ASEEEM_PS.enums.NetType.STRING, data = item.class }, 
+                                { type = ASEEEM_PS.enums.NetType.STRING, data = 'on_unequip' },
+                                { type = ASEEEM_PS.enums.NetType.BOOL, data = false })
             ASEEEM_PS.func.NetSend(ply)
             ASEEEM_PS.func.SendInventoryItems(ply)
         else
@@ -167,6 +192,11 @@ ASEEEM_PS.func.NetReceive('itemOperation', function(ply, len, data)
 
                 ASEEEM_PS.func.Net('itemOperation', false, 
                     { type = ASEEEM_PS.enums.NetType.BOOL, data = true })
+                ASEEEM_PS.func.NetSend(ply)
+                ASEEEM_PS.func.Net('clientItemFunc', false, 
+                                { type = ASEEEM_PS.enums.NetType.STRING, data = item.class }, 
+                                { type = ASEEEM_PS.enums.NetType.STRING, data = 'on_adjust' },
+                                { type = ASEEEM_PS.enums.NetType.BOOL, data = false })
                 ASEEEM_PS.func.NetSend(ply)
             else
                 ASEEEM_PS.func.Net('itemOperation', false, 

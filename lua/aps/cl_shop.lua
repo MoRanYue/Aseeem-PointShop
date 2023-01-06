@@ -11,17 +11,17 @@ ASEEEM_PS.func.NetReceive('itemUpdated', function(len, data)
 end)
 
 function ASEEEM_PS.func.GetItemsInItemType(type)
+    return ASEEEM_PS.func.GetItemsFromItemTypeClass(type.class)
+end
+
+function ASEEEM_PS.func.GetItemsFromItemTypeClass(type_class)
     local foundItems = {}
     for k, v in pairs(ASEEEM_PS.data.items) do
-        if v.type == type.class then
+        if v.type == type_class then
             table.insert(foundItems, v)
         end
     end
     return foundItems
-end
-
-function ASEEEM_PS.func.GetItemsFromItemTypeClass(type_class)
-    return ASEEEM_PS.func.GetItemsInItemType({class = type_class})
 end
 
 function ASEEEM_PS.func.GetItemTypeByItemClass(item_class)

@@ -324,14 +324,14 @@ function PANEL:SetItem(item)
                 { type = ASEEEM_PS.enums.NetType.TABLE, data = { self.item.class, data } })
             ASEEEM_PS.func.NetServer()
 
-            timer.Simple(0.3, function()
-                if ASEEEM_PS.business.success and self.item then
-                    local itemTypeTemp = ASEEEM_PS.func.GetItemTypeByItem(self.item)
-                    if itemTypeTemp.client and itemTypeTemp.client.on_adjust then
-                        itemTypeTemp.client.on_adjust(ASEEEM_PS.func.GetItemByClass(self.item.class), ASEEEM_PS.func.GetInventoryItemByClass(self.invItem.class))
-                    end
-                end
-            end)
+            -- timer.Simple(0.3, function()
+            --     if ASEEEM_PS.business.success and self.item then
+            --         local itemTypeTemp = ASEEEM_PS.func.GetItemTypeByItem(self.item)
+            --         if itemTypeTemp.client and itemTypeTemp.client.on_adjust then
+            --             itemTypeTemp.client.on_adjust(ASEEEM_PS.func.GetItemByClass(self.item.class), ASEEEM_PS.func.GetInventoryItemByClass(self.invItem.class))
+            --         end
+            --     end
+            -- end)
         end)
     end
 end

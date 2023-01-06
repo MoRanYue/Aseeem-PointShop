@@ -38,6 +38,7 @@ AddCSLuaFile('aps/cl_data_source.lua')
 
 AddCSLuaFile('aps/vgui/cp_button.lua')
 AddCSLuaFile('aps/vgui/cp_header_point.lua')
+AddCSLuaFile('aps/vgui/cp_round_avatar.lua')
 AddCSLuaFile('aps/vgui/cp_shop_slot.lua')
 AddCSLuaFile('aps/vgui/cp_shop_item_info.lua')
 AddCSLuaFile('aps/vgui/cp_inventory_item_info.lua')

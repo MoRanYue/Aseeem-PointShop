@@ -80,8 +80,7 @@ function ASEEEM_PS.func.openMenu()
     ASEEEM_PS.menu.absolute.closeBtn.Paint = function(s, w, h)
         surface.SetDrawColor(ASEEEM_PS.theme.btnBackgroundColor)
         surface.DrawRect(0, 0, w, h)
-        
-        -- surface.SetDrawColor(ASEEEM_PS.theme.btnTextColor)
+
         surface.SetDrawColor(HSVToColor((CurTime()*ASEEEM_PS.theme.rainbowBtnColorSpeed) % 360, 1, 1))
         surface.SetMaterial(matDisable)
         surface.DrawTexturedRect(0, 0, w, h)
@@ -120,6 +119,14 @@ function ASEEEM_PS.func.openMenu()
     ASEEEM_PS.menu.absolute.showProPoint.Think = function(s)
         if isAnimating then
             s:SetPos(ASEEEM_PS.menu.panel:GetWide() - s:GetWide() - ASEEEM_PS.theme.pointTextRight*2 - ASEEEM_PS.menu.absolute.showPoint:GetWide(), 7)
+        end
+    end
+
+    ASEEEM_PS.menu.selectedSideBarItem = nil
+    for k, _ in pairs(ASEEEM_PS.data.itemTypes) do
+        if #ASEEEM_PS.func.GetItemsFromItemTypeClass(k) > 0 then
+            ASEEEM_PS.menu.selectedSideBarItem = ASEEEM_PS.menu.selectedSideBarItem or k
+            break 
         end
     end
 
@@ -248,7 +255,7 @@ function ASEEEM_PS.func.openMenu()
             s:SetSize(ASEEEM_PS.menu.sideBarScroll:GetWide(), ASEEEM_PS.menu.sideBarScroll:GetTall())
         end
     end
-    ASEEEM_PS.menu.selectedSideBarItem = ''
+    
     ASEEEM_PS.menu.sideBarItems = {}
     --创建商店类别
     for _, v in SortedPairs(ASEEEM_PS.data.itemTypes) do
@@ -256,9 +263,6 @@ function ASEEEM_PS.func.openMenu()
             continue 
         end
 
-        if ASEEEM_PS.menu.selectedSideBarItem == '' then
-            ASEEEM_PS.menu.selectedSideBarItem = v.class
-        end
         local temp = ASEEEM_PS.menu.sideBar:Add("AButton")
         temp:SetText(v.display)
         temp:SetHoverAnimType(1)
@@ -308,10 +312,10 @@ function ASEEEM_PS.func.openMenu()
             end
             
             local col, row = 1, 1
-            for _, w in pairs(ASEEEM_PS.data.items) do
+            for _, w in pairs(ASEEEM_PS.func.GetItemsFromItemTypeClass(ASEEEM_PS.menu.selectedSideBarItem)) do
                 --只有可购买的物品才能上架
                 --查看是否和当前类别相同
-                if !w.purchasable or w.type != ASEEEM_PS.menu.selectedSideBarItem then
+                if !w.purchasable then
                     continue 
                 end
                 if col > ASEEEM_PS.theme.shopWidth then
@@ -410,6 +414,9 @@ function ASEEEM_PS.func.openMenu()
         if IsValid(s.adjustWindow) then
             s.adjustWindow:Remove()
         end
+        if IsValid(s.caller) then
+            s.caller.active = false
+        end
     end
 
     ASEEEM_PS.menu.absolute.invRow = {}
@@ -446,32 +453,32 @@ function ASEEEM_PS.func.openMenu()
     end
 
     local invIndexDe = 0
-    for k, v in pairs(ASEEEM_PS.data.inventory) do
-        k = k - invIndexDe
-        if k > ASEEEM_PS.data.invSlots then
-            break
-        end
-        -- print(ASEEEM_PS.func.GetItemFromInventoryItem(v))
-        if !v.is_valid or !ASEEEM_PS.func.GetItemFromInventoryItem(v) then --无效物品不渲染
-            invIndexDe = invIndexDe + 1
-            continue
-        end
-        invSlots[k]:SetItem(ASEEEM_PS.func.GetItemFromInventoryItem(v))
-        invSlots[k].btn.DoClick = function(s)
-            invSlots[k].active = !invSlots[k].active
-            if invSlots[k].active then
-                for _, w in pairs(invSlots) do
-                    if w != invSlots[k] then
-                        w.active = false
-                    end
-                end
-                ASEEEM_PS.menu.inventoryItemInfo:SetItem(invSlots[k].item)
-                ASEEEM_PS.menu.inventoryItemInfo:MoveTo(ASEEEM_PS.menu.panel:GetWide() - ASEEEM_PS.menu.inventoryItemInfo:GetWide(), ASEEEM_PS.menu.shop:GetY(), 0.5, 0, -1)
-            else
-                ASEEEM_PS.menu.inventoryItemInfo:MoveTo(ASEEEM_PS.menu.panel:GetWide(), ASEEEM_PS.menu.shop:GetY(), 0.6, 0, -1)
-            end
-        end
-    end
+    -- for k, v in pairs(ASEEEM_PS.data.inventory) do
+    --     k = k - invIndexDe
+    --     if k > ASEEEM_PS.data.invSlots then
+    --         break
+    --     end
+    --     if !v.is_valid or !ASEEEM_PS.func.GetItemFromInventoryItem(v) then --无效物品不渲染
+    --         invIndexDe = invIndexDe + 1
+    --         continue
+    --     end
+    --     invSlots[k]:SetItem(ASEEEM_PS.func.GetItemFromInventoryItem(v))
+    --     invSlots[k].btn.DoClick = function(s)
+    --         invSlots[k].active = !invSlots[k].active
+    --         if invSlots[k].active then
+    --             for _, w in pairs(invSlots) do
+    --                 if w != invSlots[k] then
+    --                     w.active = false
+    --                 end
+    --             end
+    --             ASEEEM_PS.menu.inventoryItemInfo:SetItem(invSlots[k].item)
+    --             ASEEEM_PS.menu.inventoryItemInfo:MoveTo(ASEEEM_PS.menu.panel:GetWide() - ASEEEM_PS.menu.inventoryItemInfo:GetWide(), ASEEEM_PS.menu.shop:GetY(), 0.5, 0, -1)
+    --             ASEEEM_PS.menu.inventoryItemInfo.caller = invSlots[k]
+    --         else
+    --             ASEEEM_PS.menu.inventoryItemInfo:MoveTo(ASEEEM_PS.menu.panel:GetWide(), ASEEEM_PS.menu.shop:GetY(), 0.6, 0, -1)
+    --         end
+    --     end
+    -- end
 
     timer.Create('ASEEEM_PS_reloadInventory', 0.5, 0, function()
         local invIndexDe, fullSlots = 0, 0
@@ -499,6 +506,7 @@ function ASEEEM_PS.func.openMenu()
                     end
                     ASEEEM_PS.menu.inventoryItemInfo:SetItem(invSlots[k].item)
                     ASEEEM_PS.menu.inventoryItemInfo:MoveTo(ASEEEM_PS.menu.panel:GetWide() - ASEEEM_PS.menu.inventoryItemInfo:GetWide(), ASEEEM_PS.menu.shop:GetY(), 0.5, 0, -1)
+                    ASEEEM_PS.menu.inventoryItemInfo.caller = invSlots[k]
                 else
                     ASEEEM_PS.menu.inventoryItemInfo:MoveTo(ASEEEM_PS.menu.panel:GetWide(), ASEEEM_PS.menu.shop:GetY(), 0.6, 0, -1)
                 end
@@ -524,7 +532,7 @@ function ASEEEM_PS.func.openMenu()
         draw.RoundedBox(10, 0, 0, w, h, ASEEEM_PS.theme.invBtnBackgroundColor)
     end
 
-    ASEEEM_PS.menu.absolute.inventoryBtnAvt = ASEEEM_PS.menu.absolute.inventoryBtn:Add("AvatarImage")
+    ASEEEM_PS.menu.absolute.inventoryBtnAvt = ASEEEM_PS.menu.absolute.inventoryBtn:Add("ARoundAvatar")
     ASEEEM_PS.menu.absolute.inventoryBtnAvt:SetPlayer(cl, 64)
     ASEEEM_PS.menu.absolute.inventoryBtnAvt:SetSize(56, 56)
     ASEEEM_PS.menu.absolute.inventoryBtnAvt:SetPos(10, 10)

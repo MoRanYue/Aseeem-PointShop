@@ -7,6 +7,7 @@ include('aps/cl_data_source.lua')
 
 include('aps/vgui/cp_button.lua')
 include('aps/vgui/cp_header_point.lua')
+include('aps/vgui/cp_round_avatar.lua')
 include('aps/vgui/cp_shop_slot.lua')
 include('aps/vgui/cp_shop_item_info.lua')
 include('aps/vgui/cp_inventory_item_info.lua')

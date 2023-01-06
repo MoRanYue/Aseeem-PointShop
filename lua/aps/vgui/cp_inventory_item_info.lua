@@ -128,14 +128,14 @@ function PANEL:SetItem(item)
                         { type = ASEEEM_PS.enums.NetType.TABLE, data = { self.item.class } })
             ASEEEM_PS.func.NetServer()
             
-            timer.Simple(0.2, function()
-                if ASEEEM_PS.business.success then
-                    local itemTypeTemp = ASEEEM_PS.func.GetItemTypeByItem(self.item)
-                    if itemTypeTemp.client and itemTypeTemp.client.on_sell then
-                        itemTypeTemp.client.on_sell(ASEEEM_PS.func.GetItemByClass(self.item.class))
-                    end
-                end
-            end)
+            -- timer.Simple(0.2, function()
+            --     if ASEEEM_PS.business.success then
+            --         local itemTypeTemp = ASEEEM_PS.func.GetItemTypeByItem(self.item)
+            --         if itemTypeTemp.client and itemTypeTemp.client.on_sell then
+            --             itemTypeTemp.client.on_sell(ASEEEM_PS.func.GetItemByClass(self.item.class))
+            --         end
+            --     end
+            -- end)
             if !ASEEEM_PS.func.GetInventoryItemByClass(self.item.class) or ASEEEM_PS.func.GetInventoryItemByClass(self.item.class).amount <= 1 then
                 self:ClosePanel()
             end
@@ -177,13 +177,6 @@ function PANEL:SetItem(item)
                 ASEEEM_PS.func.NetServer()
 
                 timer.Simple(0.2, function()
-                    if ASEEEM_PS.business.success then
-                        local itemTypeTemp = ASEEEM_PS.func.GetItemTypeByItem(self.item)
-                        if itemTypeTemp.client and itemTypeTemp.client.on_unequip then
-                            itemTypeTemp.client.on_unequip(ASEEEM_PS.func.GetItemByClass(self.item.class), ASEEEM_PS.func.GetInventoryItemByClass(self.item.class))
-                        end
-                    end
-
                     self:SetItem(ASEEEM_PS.func.GetItemByClass(self.item.class))
                 end)
             end)
@@ -195,20 +188,13 @@ function PANEL:SetItem(item)
                         { type = ASEEEM_PS.enums.NetType.TABLE, data = { self.item.class } })
                 ASEEEM_PS.func.NetServer()
 
-                timer.Simple(0.2, function()
-                    if ASEEEM_PS.business.success then
-                        local itemTypeTemp = ASEEEM_PS.func.GetItemTypeByItem(self.item)
-                        if itemTypeTemp.client and itemTypeTemp.client.on_equip then
-                            itemTypeTemp.client.on_equip(ASEEEM_PS.func.GetItemByClass(self.item.class), ASEEEM_PS.func.GetInventoryItemByClass(self.item.class))
-                        end
-                    end
-
-                    self:SetItem(ASEEEM_PS.func.GetItemByClass(self.item.class))
-                end)
-
                 if !ASEEEM_PS.func.GetInventoryItemByClass(self.item.class) or ASEEEM_PS.func.GetInventoryItemByClass(self.item.class).amount <= 1 then
                     self:ClosePanel()
                 end
+
+                timer.Simple(0.2, function()
+                    self:SetItem(ASEEEM_PS.func.GetItemByClass(self.item.class))
+                end)
             end)
         end
     end
