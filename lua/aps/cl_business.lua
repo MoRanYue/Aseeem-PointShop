@@ -25,7 +25,6 @@ ASEEEM_PS.func.NetReceive('clientItemFunc', function(lem, data)
     end
 
     local itemType = ASEEEM_PS.func.GetItemTypeByItemClass(itemClass)
-
     if itemType and itemType.client and itemType.client[run] then
         return itemType.client[run](ASEEEM_PS.func.GetItemByClass(itemClass), ASEEEM_PS.func.GetInventoryItemByClass(itemClass))
     end

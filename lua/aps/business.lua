@@ -12,8 +12,6 @@ util.AddNetworkString("clientItemFunc")
 -- }
 
 ASEEEM_PS.func.AddCHook('PlayerFullyConnectedBussiness', 'setupEquippedItems', function(ply)
-    if ply:IsBot() then return end
-
     local plyInv = ply:GetInventory()
     if plyInv then
         local plyInvInventory = plyInv.inventory
@@ -21,15 +19,17 @@ ASEEEM_PS.func.AddCHook('PlayerFullyConnectedBussiness', 'setupEquippedItems', f
             if v.is_valid and v.equipped then
                 local _, item = ASEEEM_PS.func.GetItem(v.class)
                 local success, error = pcall(ASEEEM_PS.data.itemTypes[item.type].on_equip, item, ply, v)
-                if success then
-                    ASEEEM_PS.func.Net('clientItemFunc', false, 
-                                    { type = ASEEEM_PS.enums.NetType.STRING, data = item.class }, 
-                                    { type = ASEEEM_PS.enums.NetType.STRING, data = 'on_equip' },
-                                    { type = ASEEEM_PS.enums.NetType.BOOL, data = true })
-                    ASEEEM_PS.func.NetSend(ply)
-                else
-                    MsgC(Color(144, 144, 114), "[Aseeem PointShop] 玩家 " .. ply:Name() .. "（" .. ply:SteamID() .. "）" .. " 在执行物品 " .. v.class .. " 的”on_equip“函数时出错！\n" .. error)
+                if !success then
+                    MsgC(Color(144, 144, 114), "[Aseeem 点数商店] 玩家 " .. ply:Name() .. "（" .. ply:SteamID() .. "）" .. " 在执行物品 " .. v.name .. "（" .. v.class .. "） 的”on_equip“函数时出错！\n" .. error)
                 end
+
+                timer.Simple(5, function() --需要运行客户端需要运行的“on_equip”函数
+                    ASEEEM_PS.func.Net('clientItemFunc', false, 
+                                { type = ASEEEM_PS.enums.NetType.STRING, data = item.class }, 
+                                { type = ASEEEM_PS.enums.NetType.STRING, data = 'on_equip' },
+                                { type = ASEEEM_PS.enums.NetType.BOOL, data = true })
+                    ASEEEM_PS.func.NetSend(ply)
+                end)
             end
         end
     end

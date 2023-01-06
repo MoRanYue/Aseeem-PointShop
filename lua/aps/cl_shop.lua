@@ -20,6 +20,10 @@ function ASEEEM_PS.func.GetItemsInItemType(type)
     return foundItems
 end
 
+function ASEEEM_PS.func.GetItemsFromItemTypeClass(type_class)
+    return ASEEEM_PS.func.GetItemsInItemType({class = type_class})
+end
+
 function ASEEEM_PS.func.GetItemTypeByItemClass(item_class)
     for k, v in pairs(ASEEEM_PS.data.itemTypes) do
         if !ASEEEM_PS.func.GetItemByClass(item_class) then return nil end

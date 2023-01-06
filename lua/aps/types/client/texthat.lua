@@ -48,12 +48,19 @@ texthat.on_equip = function(item, inv_item)
         },
     }
 
-    ASEEEM_PS.data.itemTypes.texthat.client.data.text = inv_item['data'][1] or 'NIHAO'
+    PrintTable(inv_item)
+    print(CurTime())
+
+    ASEEEM_PS.data.itemTypes.texthat.client.data.text = inv_item['data'] and inv_item['data'][1] or 'EXAMPLE TEXT'
     ASEEEM_PS.data.itemTypes.texthat.client.data.color = color
     ASEEEM_PS.data.itemTypes.texthat.client.data.rainbow = rainbow
     ASEEEM_PS.data.itemTypes.texthat.client.data.outfit = baseOutfit
 
     if !ply.AttachPACPart then
+        if !pac then
+            LocalPlayer():PrintMessage(HUD_PRINTTALK, '[Aseeem 点数商店] PAC调用失败。')
+            return 
+        end
         pac.SetupENT(ply)
         ply:SetShowPACPartsInEditor( false )
     end

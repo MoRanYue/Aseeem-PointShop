@@ -130,7 +130,7 @@ function ASEEEM_PS.func.openMenu()
         draw.RoundedBox(10, 0, 0, w, h, ASEEEM_PS.theme.shopBackgroundColor)
 
         --显示当前的类别
-        if ASEEEM_PS.menu.selectedSideBarItem != '' and ASEEEM_PS.data.itemTypes then
+        if ASEEEM_PS.menu.selectedSideBarItem and ASEEEM_PS.menu.selectedSideBarItem != '' and ASEEEM_PS.data.itemTypes then
             draw.SimpleText(string.format(language.GetPhrase('ASEEEM_PS_itemType'), ASEEEM_PS.data.itemTypes[ASEEEM_PS.menu.selectedSideBarItem].display), 
                         "JXZK18", 10, 10, ASEEEM_PS.theme.ShopItemsTypeTextColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
         end
@@ -147,10 +147,6 @@ function ASEEEM_PS.func.openMenu()
         surface.SetDrawColor(ASEEEM_PS.theme.shopVBarBackgroundColor)
         surface.DrawRect(0, 0, w, h)
     end
-    -- shopBar.btnUp.Paint = function(s, w, h)
-    -- end
-    -- shopBar.btnDown.Paint = function(s, w, h)
-    -- end
     shopBar.btnGrip.Paint = function(s, w, h)
         draw.RoundedBox(10, 0, 0, w, h, ASEEEM_PS.theme.shopVBarColor)
     end
@@ -164,7 +160,7 @@ function ASEEEM_PS.func.openMenu()
     end
 
     ASEEEM_PS.menu.absolute.shopRow = {}
-    for i=0, #ASEEEM_PS.data.items, ASEEEM_PS.theme.shopWidth do
+    for i=0, #ASEEEM_PS.func.GetItemsInItemType(ASEEEM_PS.menu.selectedSideBarItem)+ASEEEM_PS.theme.shopWidth, ASEEEM_PS.theme.shopWidth do
         local temp = ASEEEM_PS.menu.shopLayout:Add("DPanel")
         temp:SetPaintBackground(false)
         temp.Think = function(s)
@@ -287,13 +283,20 @@ function ASEEEM_PS.func.openMenu()
             end
 
             ASEEEM_PS.menu.selectedSideBarItem = temp.type.class
-            if ASEEEM_PS.menu.absolute.shopRow then
-                for _, w in pairs(ASEEEM_PS.menu.absolute.shopRow) do
-                    local chd = w:GetChildren()
-                    for _, x in pairs(chd) do
-                        x:Remove()
-                    end
+            
+            for _, w in pairs(ASEEEM_PS.menu.absolute.shopRow) do
+                w:Remove()
+            end
+
+            ASEEEM_PS.menu.absolute.shopRow = {}
+            for i=0, #ASEEEM_PS.func.GetItemsFromItemTypeClass(ASEEEM_PS.menu.selectedSideBarItem)+ASEEEM_PS.theme.shopWidth, ASEEEM_PS.theme.shopWidth do
+                local temp = ASEEEM_PS.menu.shopLayout:Add("DPanel")
+                temp:SetPaintBackground(false)
+                temp.Think = function(s)
+                    s:SetSize(ASEEEM_PS.menu.shopLayout:GetWide(), 200 + ASEEEM_PS.theme.shopItemMargin)
                 end
+
+                table.insert(ASEEEM_PS.menu.absolute.shopRow, temp)
             end
 
             ASEEEM_PS.menu.shopItemInfo.ClosePanel = function(s)
